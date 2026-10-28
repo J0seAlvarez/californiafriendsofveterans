@@ -17,14 +17,26 @@
 <link rel="stylesheet" href="/css/modern.css">
 <script defer src="/js/home.js"></script>
 <style>
-.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.photo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem;margin-top:1rem}
 .photo-grid figure{margin:0}
-.photo-grid img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);box-shadow:var(--shadow)}
-.photo-grid figcaption{margin-top:.5rem;color:var(--muted, #555);font-size:.95rem;text-align:center}
+.photo-btn{display:block;width:100%;padding:0;border:0;background:none;cursor:zoom-in}
+.photo-btn img{display:block;width:100%;height:auto;border-radius:var(--radius);box-shadow:var(--shadow)}
+.photo-grid figcaption{margin-top:.75rem;color:var(--muted, #555);font-size:.95rem;text-align:center}
+.gallery-hint{color:var(--muted, #555);margin-bottom:1.5rem}
+.lightbox{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;padding:1rem}
+.lightbox.open{display:flex}
+.lightbox figure{margin:0;max-width:92vw;text-align:center}
+.lightbox img{max-width:92vw;max-height:80vh;width:auto;height:auto;border-radius:var(--radius)}
+.lightbox figcaption{color:#fff;margin-top:1rem;font-size:1rem}
+.lightbox-counter{color:#ccc;margin-top:.5rem;font-size:.9rem}
+.lightbox-close,.lightbox-prev,.lightbox-next{position:absolute;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:50%;width:3rem;height:3rem;font-size:1.5rem;cursor:pointer;line-height:1}
+.lightbox-close{top:1rem;right:1rem}
+.lightbox-prev{left:1rem;top:50%;transform:translateY(-50%)}
+.lightbox-next{right:1rem;top:50%;transform:translateY(-50%)}
 .year-list{list-style:none;margin:0;padding:0}
 .year-list li{padding:.6rem 0;border-bottom:1px solid #eee}
 .year-list li:last-child{border-bottom:0}
-@media (max-width:700px){.photo-grid{grid-template-columns:1fr}}
+@media (max-width:700px){.photo-grid{grid-template-columns:1fr}.lightbox-prev{left:.25rem}.lightbox-next{right:.25rem}}
 </style>
 </head>
 <body>
@@ -83,25 +95,38 @@
 
   <section class="section">
     <div class="container">
+      <p class="eyebrow reveal">Photos</p>
+      <h2 class="reveal">From the parade</h2>
+      <p class="reveal gallery-hint">Click any photo to view it larger, then use the arrows or swipe to move through the gallery.</p>
       <div class="photo-grid">
         <figure class="reveal">
-          <img src="/img/parade-scouts-flags.jpg" alt="Scouts carrying small American flags" width="3668" height="5402" loading="lazy" decoding="async">
+          <button type="button" class="photo-btn" aria-label="View larger: Scouts carrying flags">
+            <img src="/img/parade-scouts-flags.jpg" alt="Scouts carrying small American flags" width="3668" height="5402" loading="lazy" decoding="async">
+          </button>
           <figcaption>Scouts carrying flags</figcaption>
         </figure>
         <figure class="reveal">
-          <img src="/img/parade-color-guard.jpg" alt="Color guard on the march" width="2837" height="1891" loading="lazy" decoding="async">
+          <button type="button" class="photo-btn" aria-label="View larger: Color guard on the march">
+            <img src="/img/parade-color-guard.jpg" alt="Color guard on the march" width="2837" height="1891" loading="lazy" decoding="async">
+          </button>
           <figcaption>Color guard on the march</figcaption>
         </figure>
         <figure class="reveal">
-          <img src="/img/parade-reenactors-salute.jpg" alt="Revolutionary War reenactors firing a salute" width="4926" height="3284" loading="lazy" decoding="async">
+          <button type="button" class="photo-btn" aria-label="View larger: Revolutionary War reenactors firing a salute">
+            <img src="/img/parade-reenactors-salute.jpg" alt="Revolutionary War reenactors firing a salute" width="4926" height="3284" loading="lazy" decoding="async">
+          </button>
           <figcaption>Revolutionary War reenactors firing a salute</figcaption>
         </figure>
         <figure class="reveal">
-          <img src="/img/parade-marine-motorcycle.jpg" alt="Marine riding a motorcycle carrying flags in a parade" width="4287" height="6430" loading="lazy" decoding="async">
+          <button type="button" class="photo-btn" aria-label="View larger: Marine carrying flags on a motorcycle">
+            <img src="/img/parade-marine-motorcycle.jpg" alt="Marine riding a motorcycle carrying flags in a parade" width="4287" height="6430" loading="lazy" decoding="async">
+          </button>
           <figcaption>Marine carrying flags on a motorcycle</figcaption>
         </figure>
         <figure class="reveal">
-          <img src="/img/parade-veterans-day-flag.jpg" alt="American flag beside wooden tiles spelling Veterans Day" width="6440" height="4293" loading="lazy" decoding="async">
+          <button type="button" class="photo-btn" aria-label="View larger: American flag and Veterans Day tribute">
+            <img src="/img/parade-veterans-day-flag.jpg" alt="American flag beside wooden tiles spelling Veterans Day" width="6440" height="4293" loading="lazy" decoding="async">
+          </button>
           <figcaption>American flag and Veterans Day tribute</figcaption>
         </figure>
       </div>
@@ -198,5 +223,65 @@
 </footer>
 
 <button class="to-top" id="to-top" aria-label="Back to top">↑</button>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" aria-hidden="true">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Close photo viewer">×</button>
+  <button class="lightbox-prev" id="lightbox-prev" aria-label="Previous photo">‹</button>
+  <figure>
+    <img id="lightbox-img" src="" alt="">
+    <figcaption id="lightbox-caption"></figcaption>
+    <p class="lightbox-counter" id="lightbox-counter"></p>
+  </figure>
+  <button class="lightbox-next" id="lightbox-next" aria-label="Next photo">›</button>
+</div>
+
+<script>
+(function () {
+  var items = Array.prototype.slice.call(document.querySelectorAll('.photo-btn'));
+  var box = document.getElementById('lightbox');
+  var img = document.getElementById('lightbox-img');
+  var cap = document.getElementById('lightbox-caption');
+  var cnt = document.getElementById('lightbox-counter');
+  var idx = 0;
+  function show(i) {
+    idx = (i + items.length) % items.length;
+    var im = items[idx].querySelector('img');
+    img.src = im.getAttribute('src');
+    img.alt = im.alt;
+    cap.textContent = items[idx].parentNode.querySelector('figcaption').textContent;
+    cnt.textContent = (idx + 1) + ' of ' + items.length;
+    box.classList.add('open');
+    box.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    box.classList.remove('open');
+    box.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  items.forEach(function (btn, i) {
+    btn.addEventListener('click', function () { show(i); });
+  });
+  document.getElementById('lightbox-close').addEventListener('click', close);
+  document.getElementById('lightbox-prev').addEventListener('click', function (e) { e.stopPropagation(); show(idx - 1); });
+  document.getElementById('lightbox-next').addEventListener('click', function (e) { e.stopPropagation(); show(idx + 1); });
+  box.addEventListener('click', function (e) { if (e.target === box) close(); });
+  document.addEventListener('keydown', function (e) {
+    if (!box.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') show(idx - 1);
+    if (e.key === 'ArrowRight') show(idx + 1);
+  });
+  var tx = null;
+  box.addEventListener('touchstart', function (e) { tx = e.changedTouches[0].clientX; }, { passive: true });
+  box.addEventListener('touchend', function (e) {
+    if (tx === null) return;
+    var dx = e.changedTouches[0].clientX - tx;
+    if (dx < -40) show(idx + 1);
+    if (dx > 40) show(idx - 1);
+    tx = null;
+  }, { passive: true });
+})();
+</script>
 </body>
 </html>
