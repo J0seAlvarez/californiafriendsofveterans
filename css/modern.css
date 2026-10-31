@@ -232,3 +232,5 @@ p { margin: 0 0 1em; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .btn:hover, .card:hover { transform: none; }
 }
+
+.footer-phone { font-weight: 700; font-size: 1.1rem; }
