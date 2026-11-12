@@ -21,6 +21,7 @@
 .photo-grid figure{margin:0}
 .photo-btn{display:block;width:100%;padding:0;border:0;background:none;cursor:zoom-in}
 .photo-btn img{display:block;width:100%;height:auto;border-radius:var(--radius);box-shadow:var(--shadow)}
+.photo-grid-uniform .photo-btn img{aspect-ratio:3/4;object-fit:cover}
 .photo-grid figcaption{margin-top:.75rem;color:var(--muted, #555);font-size:.95rem;text-align:center}
 .gallery-hint{color:var(--muted, #555);margin-bottom:1.5rem}
 .lightbox{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;padding:1rem}
@@ -100,7 +101,7 @@
       <p class="reveal">The 2026 Petaluma Veterans Day Parade stepped off at 1 p.m. on Tuesday, November 11, in downtown Petaluma, under a sunny sky, about 75°F. Grand Marshal Andrew LeMarQuand, Commander of VFW Post 1929, led a parade themed “Celebrating 250 Years of the United States of America.”</p>
       <p class="reveal">The route ran from Walnut Park up Fourth Street past the Petaluma Historical Library &amp; Museum, where a mounted color guard carried the colors and Korean War veteran Paul A. Lewis rode with a banner reading “Only a few of us Petaluma Korean War Veterans are left, but South Korea is standing, free and strong.” Veterans including Command Sgt. Maj. Roger Appleby (Ret.) and Sgt. Fred Cobani waved to the crowd from Corvettes. The Marine Corps League, Santa Rosa Detachment #686, marched with its color guard, a large U.S. Coast Guard Training Center Petaluma formation marched in step behind its colors, and military vehicles — including a Humvee and a Coast Guard boat on a trailer — rolled through downtown.</p>
       <p class="reveal gallery-hint">Click any photo to view it larger, then use the arrows or swipe to move through the gallery.</p>
-      <div class="photo-grid">
+      <div class="photo-grid photo-grid-uniform">
         <figure class="reveal">
           <button type="button" class="photo-btn" aria-label="View larger: Mounted color guard passes the Petaluma Historical Library and Museum">
             <img src="/img/parade-2026-01.jpg" alt="Mounted color guard passes the Petaluma Historical Library &amp; Museum" width="832" height="1462" loading="lazy" decoding="async">
